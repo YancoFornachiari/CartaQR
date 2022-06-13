@@ -372,13 +372,12 @@ export default () => {
 	//Funciones para abrir y cerrar modales
 	const handlePressFamilia = () => {
 		setVisibilityFamilia(true);
-		filtrarProducto('');
+		filtrarFamilia('');
 	};
 
-	const handleCerrarFamilia = () => {
-		filtrarFamilia('');
+	/*const handleCerrarFamilia = () => {
 		setVisibilityFamilia(false);
-	};
+	};*/
 
 	const handlePressContacto = () => {
 		setVisibilityContacto(true);
@@ -413,19 +412,38 @@ export default () => {
 				value={searchProducto}
 				style={styles.action}
 			/> */}
-
+			
 			{/* Botón Seleccionar Familia */}
 			<TouchableOpacity onPress={handlePressFamilia} style={styles.btnContFamilia}>
 				<Text style={styles.textFamilia}>{selectedFamilia.nombre_familia}</Text>
 				<AntDesign name="caretdown" size="large" color="#58b543" style={{ flex: 1 }} />
 			</TouchableOpacity>
+			
+			<FlatList
+				style={styles.lista}
+				data={filteredFamilia}
+				renderItem={({ item }) =>(
+					<View>
+						<Text>{item.nombre_familia}</Text>
+						<FlatList 
+							style={styles.lista}
+							data={filteredProducto}
+							keyExtractor={(x) => String(x.id_producto)}
+							renderItem={ viewProducto }
+							/>
+						
+					</View>
+				)}
+			/>
 
+			{/* Lista de productos funcional */}
+			{/*
 			<FlatList
 				style={styles.lista}
 				data={filteredProducto}
 				keyExtractor={(x) => String(x.id_producto)}
 				renderItem={viewProducto}
-			/>
+		/>*/}
 
 			{/* Botón de Sugerencias */}
 			<TouchableOpacity onPress={handlePressContacto} style={styles.btnSugerencias}>
@@ -453,14 +471,12 @@ export default () => {
 						onChangeText={(text) =>filtrarFamilia(text)}
 						value={searchFamilia}
 					/>
-
 					<FlatList
 						style={styles.lista}
 						data={filteredFamilia}
 						keyExtractor={(x) => String(x.id_familia)}
 						renderItem={viewFamilia}
 					/>
-
 					<TouchableOpacity 
 						style={{backgroundColor: 'red', width: '80%', height: 40, alignSelf: 'center', borderRadius: 10, margin: 10, alignItems: 'center', justifyContent: 'center'}}
 						onPress={() => setVisibilityFamilia(false)}>
