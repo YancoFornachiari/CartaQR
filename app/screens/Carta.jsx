@@ -1,42 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import {
-	StyleSheet,
-	Text,
-	View,
-	FlatList,
-	Image,
-	TouchableOpacity,
-} from 'react-native';
-import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { TextInput, ScrollView, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, } from 'react-native';
+
 import Modal from '../components/Modal';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 //Estilos
 const styles = StyleSheet.create({
-	lista: {
-		alignSelf: 'stretch',
-		margin: 5,
-		height: 350,
-	},
-	btnSugerencia: {
-		height: 40,
-		width: 140,
-		borderWidth: 1,
-		borderRadius: 5,
-		marginVertical: 20,
-		alignSelf: 'center',
-		justifyContent: 'center',
-	},
 	header: {
-		borderBottomWidth: 1,
 		height: 120,
+		margin: 10,
+		backgroundColor: '#58b543',
+		borderRadius: 10,
 		flexDirection: 'row',
-		marginTop: 30,
+		alignItems: 'center',
 	},
-	lista: {
-		alignSelf: 'center',
-		margin: 5,
+
+	nombreLocal: {
+		fontSize: 20,
+		fontWeight: 'bold',
+		color: '#fff'
+	},
+
+	textFamilia: {
+		fontWeight: 'bold',
+		fontSize: 15,
+		flex: 10,
+	},
+
+	action: {
+		backgroundColor: '#eee',
 		width: '90%',
+		height: 50,
+		alignSelf: 'center',
+		padding: 10,
+		borderRadius: 5,
 	},
+
+	lista: {
+		width: '90%',
+		alignSelf: 'center',
+	},
+
+	btnSugerencias: {
+		width: '70%',
+		height: 50,
+		margin: 20,
+		alignSelf: 'center',
+		backgroundColor: '#58b543',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 10,
+	},
+
 	btnFamilia: {
 		width: '100%',
 		height: 70,
@@ -45,6 +60,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 2,
 		marginTop: 10,
 	},
+
 	btnCerrar: {
 		width: 100,
 		height: 40,
@@ -54,39 +70,43 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		borderWidth: 1,
 	},
+
 	list: {
-		marginVertical: 3,
 		borderWidth: 1,
-		borderRadius: 5,
-		height: 50,
-		width: '100%',
-		paddingVertical: '5%',
-		paddingLeft: 20,
+		borderColor: '#eee',
+		backgroundColor: '#eee',
+		borderRadius: 10,
+		padding: 10,
+		justifyContent: 'center',
+		margin: 10,
 	},
+
 	contFamilia: {
-		marginVertical: 10,
-		marginHorizontal: 15,
-		borderWidth: 1,
-		borderRadius: 50,
-		paddingVertical: 20,
-		paddingHorizontal: 10,
-		height: '65%',
+		height: '70%',
+		padding: 10,
+		margin: 10,
 	},
+
 	btnContFamilia: {
 		width: '90%',
 		height: 40,
-		borderRadius: 10,
-		borderWidth: 1,
-		marginBottom: 10,
 		alignSelf: 'center',
+		alignItems: 'center',
+		flexDirection: 'row',
+
+		borderBottomWidth: 1,
+		borderBottomColor: '#58b543',
+		marginBottom: 20,
+		marginTop: 10,
 	},
+
 	productList: {
-		margin: 5,
-		borderBottomWidth: 2,
-		paddingTop: 5,
-		paddingLeft: 10,
-		height: 100,
-		fontSize: 20,
+		backgroundColor: '#eee',
+		marginLeft: 10,
+		marginRight: 10,
+		marginBottom: 10,
+		borderRadius: 10,
+		padding: 10,
 	},
 	vistaContacto: {
 		width: '40%',
@@ -149,11 +169,11 @@ export default () => {
 	const [searchFamilia, setSearchFamilia] = useState('');
 	const [familia, setFamilia] = useState([]);
 	const [filteredFamilia, setFilteredFamilia] = useState([]);
-	const [selectedFamilia, setSelectedFamilia] = useState({nombre_familia: 'Seleccionar Familia'});
+	const [selectedFamilia, setSelectedFamilia] = useState({ nombre_familia: 'Seleccione una Categoría...' });
 
 	//Llenado de  FlatList Familia
 	const fetchFamilia = async () => {
-		await fetch('http://192.168.1.183:4000/familia', {
+		await fetch('http://192.168.1.193:4000/familia', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -183,7 +203,7 @@ export default () => {
 		if (selectedFamilia.id_familia == null) {
 			const json = JSON.stringify({ idFamilia: 1 });
 
-			await fetch('http://192.168.1.183:4000/producto', {
+			await fetch('http://192.168.1.193:4000/producto', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -196,9 +216,9 @@ export default () => {
 					setProducto(data);
 				});
 		} else {
-			const json = JSON.stringify({idFamilia: selectedFamilia.id_familia});
+			const json = JSON.stringify({ idFamilia: selectedFamilia.id_familia });
 
-			await fetch('http://192.168.1.183:4000/producto', {
+			await fetch('http://192.168.1.193:4000/producto', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -218,12 +238,12 @@ export default () => {
 		fetchFamilia();
 	}, [selectedFamilia]);
 
-	const handleSelectedFamilia  = (item) => {
+	const handleSelectedFamilia = (item) => {
 		filtrarFamilia('');
 		setSelectedFamilia(item);
 		setVisibilityFamilia(false);
 	};
-	
+
 	//Función para enviar Sugerencias
 	const handleSendSugerencia = async (e) => {
 		const json = JSON.stringify({
@@ -243,7 +263,7 @@ export default () => {
 			alert('Ingrese su observación.');
 		} else {
 			try {
-				await fetch('http://192.168.1.183:4000/sugerencia', {
+				await fetch('http://192.168.1.193:4000/sugerencia', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -282,15 +302,30 @@ export default () => {
 
 	//Vista de datos en tabla Productos
 	const viewProducto = ({ item }) => {
+		const prodListStyle = StyleSheet.create({
+			nombreProducto : {
+				fontSize : 18,
+				fontWeight : 'bold',
+				marginBottom : 5,
+			},
+
+			desProducto : {
+				fontStyle: 'italic',
+				fontSize : 15,
+			},
+
+			precioProd: {
+				color : '#58b543',
+				fontSize : 15,
+				fontWeight : 'bold',
+			}
+		})
+
 		return (
-			<View>
-				<Text style={styles.productList}>
-					{item.nombre_producto}
-					{'\n'}
-					{item.desc_producto}
-					{'\n$'}
-					{item.precio_producto}
-				</Text>
+			<View style={styles.productList}>
+				<Text style={prodListStyle.nombreProducto}>{item.nombre_producto}</Text>
+				<Text style={prodListStyle.desProducto}>{item.desc_producto}</Text>
+				<Text style={prodListStyle.precioProd}>${item.precio_producto}</Text>
 			</View>
 		);
 	};
@@ -298,6 +333,7 @@ export default () => {
 	//Barra de búsqueda Familia
 	const filtrarFamilia = (text) => {
 		if (text) {
+			console.log(text);
 			const newData = familia.filter((item) => {
 				const itemData = item.nombre_familia.toUpperCase();
 				const textData = text.toUpperCase();
@@ -310,8 +346,8 @@ export default () => {
 		} else {
 			setFilteredFamilia(familia);
 			setSearchFamilia(text);
-			
-			
+
+
 		}
 	};
 
@@ -354,153 +390,85 @@ export default () => {
 
 	//Pantalla Principal
 	return (
-		<View style={{ borderWidth: 1, height: '100%' }}>
+		<View style={{ flex: 1, backgroundColor: '#fff', padding: 10 }}>
 			{/* Header */}
 			<View style={styles.header}>
-				<View
+				<Image
 					style={{
-						justifyContent: 'center',
+						width: 80,
+						height: 80,
+						borderRadius: 100,
 						marginLeft: 10,
-						width: '25%',
+						marginRight: 10,
 					}}
-				>
-					<Image
-						style={{
-							width: 80,
-							height: 80,
-							borderRadius: 100,
-							marginLeft: 10,
-						}}
-						source={{ uri: 'https://placekitten.com/g/200/200' }}
-					/>
-				</View>
-				<View
-					style={{
-						alignSelf: 'center',
-						width: '75%',
-						paddingRight: 20,
-						marginLeft: 30,
-					}}
-				>
-					<Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-						NOMBRE DEL LOCAL
-					</Text>
-				</View>
+					source={{ uri: 'https://placekitten.com/g/200/100' }}
+				/>
+
+				<Text style={styles.nombreLocal}>Local de Comida</Text>
 			</View>
+
+			{/* <TextInput
+				onChangeText={(text) => filtrarProducto(text)}
+				placeholder="Buscar Producto"
+				value={searchProducto}
+				style={styles.action}
+			/> */}
 
 			{/* Botón Seleccionar Familia */}
-			<View style={styles.contFamilia}>
-				<View style={styles.txtFiltro}>
-					<TouchableOpacity
-						onPress={handlePressFamilia}
-						style={styles.btnContFamilia}
-					>
-						<Text
-							style={{
-								height: '100%',
-								width: '100%',
-								textAlign: 'center',
-								marginVertical: 10,
-							}}
-						>
-							{selectedFamilia.nombre_familia}
-						</Text>
-					</TouchableOpacity>
-				</View>
-				<View>
-					<TextInput
-						onChangeText={(text) => filtrarProducto(text)}
-						placeholder="Buscar Producto"
-						value={searchProducto}
-						style={{
-							borderBottomWidth: 1,
-							paddingLeft: 10,
-							marginHorizontal: 8,
-							height: 40,
-						}}
-					></TextInput>
-				</View>
-				<FlatList
-					style={styles.lista}
-					data={filteredProducto}
-					keyExtractor={(x) => String(x.id_producto)}
-					renderItem={viewProducto}
-				/>
-			</View>
+			<TouchableOpacity onPress={handlePressFamilia} style={styles.btnContFamilia}>
+				<Text style={styles.textFamilia}>{selectedFamilia.nombre_familia}</Text>
+				<AntDesign name="caretdown" size="large" color="#58b543" style={{ flex: 1 }} />
+			</TouchableOpacity>
+
+			<FlatList
+				style={styles.lista}
+				data={filteredProducto}
+				keyExtractor={(x) => String(x.id_producto)}
+				renderItem={viewProducto}
+			/>
 
 			{/* Botón de Sugerencias */}
-			<View style={styles.btnSugerencia}>
-				<TouchableOpacity
-					onPress={handlePressContacto}
-					style={{ alignItems: 'center' }}
-				>
-					<Text style={{ marginHorizontal: 30 }}>
-						Sugerencias o Reclamos
-					</Text>
-				</TouchableOpacity>
-			</View>
+			<TouchableOpacity onPress={handlePressContacto} style={styles.btnSugerencias}>
+				<Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18,}}>Sugerencias o Reclamos</Text>
+			</TouchableOpacity>
 
 			{/* Modal para visualizar Familias */}
 			<Modal visibility={visibilityFamilia}>
-				<View style={{ height: '90%' }}>
-					<View
+					<Text style={{fontWeight: 'bold', color: '#000', fontSize: 18, marginLeft: 20, marginTop: 20, marginBottom: 5}}>
+						Categorías
+					</Text>
+
+					<TextInput
 						style={{
+							width: '85%',
 							height: 40,
-							alignItems: 'center',
-							justifyContent: 'center',
+							padding: 5,
+							alignSelf: 'center',
+							marginBottom: 5,
+							marginTop: 5,
+							borderBottomWidth: 1,
+							borderBottomColor: '#eee'
 						}}
-					>
-						<Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-							Familias
-						</Text>
-					</View>
-					<View style={{ width: '90%', alignSelf: 'center' }}>
-						<TextInput
-							style={{
-								borderBottomWidth: 1,
-								height: 40,
-								paddingLeft: 10,
-							}}
-							placeholder="Buscar Familia"
-							onChangeText={(text) => filtrarFamilia(text)}
-							value={searchFamilia}
-						/>
-					</View>
-					<View
-						style={{
-							backgroundColor: 'white',
-							height: '100%',
-							borderRadius: 20,
-						}}
-					>
-						<View style={{ marginBottom: 10, height: '100%' }}>
-							<FlatList
-								style={styles.lista}
-								data={filteredFamilia}
-								keyExtractor={(x) => String(x.id_familia)}
-								renderItem={viewFamilia}
-							></FlatList>
-							<View
-								style={{
-									justifyContent: 'flex-end',
-									marginVertical: 10,
-									alignItems: 'center',
-									height: 50,
-								}}
-							>
-								<TouchableOpacity
-									style={styles.btnCerrar}
-									onPress={handleCerrarFamilia}
-								>
-									<Text>Cerrar Modal</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-				</View>
+						placeholder="Buscar Categorías..."
+						onChangeText={(text) =>filtrarFamilia(text)}
+						value={searchFamilia}
+					/>
+
+					<FlatList
+						style={styles.lista}
+						data={filteredFamilia}
+						keyExtractor={(x) => String(x.id_familia)}
+						renderItem={viewFamilia}
+					/>
+
+					<TouchableOpacity 
+						style={{backgroundColor: 'red', width: '80%', height: 40, alignSelf: 'center', borderRadius: 10, margin: 10, alignItems: 'center', justifyContent: 'center'}}
+						onPress={() => setVisibilityFamilia(false)}>
+						<Text style={{color: 'white', fontSize:18, fontWeight: 'bold'}}>Cancelar</Text>
+					</TouchableOpacity>
 			</Modal>
 
-			{/* Modal para visualizar Formulario de Sugerencias */  }
+			{/* Modal para visualizar Formulario de Sugerencias */}
 			<Modal visibility={visibilityContacto}>
 				<ScrollView style={{ height: '90%' }}>
 					<View

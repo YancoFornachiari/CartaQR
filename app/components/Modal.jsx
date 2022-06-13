@@ -6,8 +6,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.3)",
-    borderWidth: 2,
-    
   },
   modalView: {
     marginVertical: 100,
@@ -15,17 +13,12 @@ const styles = StyleSheet.create({
     height: '75%',
     backgroundColor:'white',
     borderRadius: 20,
-    shadowColor: "gray",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
   },
 });
 
 export default ({ children, visibility }) => {
   return (
-    <Modal animationType="slide" transparent={true} visible={visibility}>
+    <Modal animationType="fade" transparent={true} visible={visibility}>
       <View style={styles.center}>
         <View style={styles.modalView}>{children}</View>
       </View>
