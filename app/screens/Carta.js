@@ -172,6 +172,12 @@ export default () => {
 		return ve.test(String(email).toLowerCase());
 	}
 
+	//verificar numero telefonico
+	const validatePhone = (phone) => {
+		const vp = /^\d{9}$/;
+		return vp.test(String(phone).toLowerCase());
+	}
+
 	//Llenado de  FlatList Producto
 	const fetchProduct = async () => {
 		if (selectedFamilia.id_familia == null) {
@@ -229,8 +235,8 @@ export default () => {
 		e.preventDefault();
 		if (nombreCliente === '') {
 			alert('Debe ingresar su nombre.');
-		} else if (telefonoCliente === '') {
-			alert('Debe ingresar su número telefónico.');
+		} else if (!validatePhone(telefonoCliente)) {
+			alert('Ingrese un número telefónico válido.');
 		} else if (!validateEmail(correoCliente)) {
 			alert('Debe ingresar un correo electrónico válido.');
 		} else if (observacionCliente === '') {
@@ -525,7 +531,7 @@ export default () => {
 							keyboardType="number-pad"
 							value={telefonoCliente}
 							onChangeText={(text) => setTelefonoCliente(text)}
-							maxLength={10}
+							maxLength={9}
 						/>
 						<Text style={styles.lblForm}>Correo Electrónico</Text>
 						<TextInput
