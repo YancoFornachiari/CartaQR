@@ -1,6 +1,6 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import cartaScreen from './screens/Carta';
+import cartaScreen from './src/Carta';
 
 const App = createStackNavigator(
 	{

@@ -57,9 +57,22 @@ const createSugerencia = async (req, res) => {
 	}
 };
 
+// const getAllFamilia = async (req, res) => {
+// 	try {
+// 		const response = await pool.query(
+// 			'select * from familia',
+// 			[]
+// 		);
+// 		res.json(response.rows);
+// 	} catch (e) {
+// 		res.json(e.message);
+// 	}
+// };
+
 module.exports = {
 	getFamilia,
 	getProducto,
 	getEmpresa,
 	createSugerencia,
+	//getAllFamilia,
 };
